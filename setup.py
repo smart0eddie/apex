@@ -194,7 +194,7 @@ if "--cuda_ext" in sys.argv:
                 "csrc/multi_tensor_lamb_mp.cu",
             ],
             extra_compile_args={
-                "cxx": ["-O3"] + version_dependent_macros,
+                "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
                 "nvcc": append_nvcc_threads(
                     [
                         "-lineinfo",
@@ -202,7 +202,7 @@ if "--cuda_ext" in sys.argv:
                         # '--resource-usage',
                         "--use_fast_math",
                     ]
-                    + version_dependent_macros
+                    + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE']
                 ),
             },
         )
@@ -212,8 +212,8 @@ if "--cuda_ext" in sys.argv:
             name="syncbn",
             sources=["csrc/syncbn.cpp", "csrc/welford.cu"],
             extra_compile_args={
-                "cxx": ["-O3"] + version_dependent_macros,
-                "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros),
+                "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
+                "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
         )
     )
@@ -223,8 +223,8 @@ if "--cuda_ext" in sys.argv:
             name="fused_layer_norm_cuda",
             sources=["csrc/layer_norm_cuda.cpp", "csrc/layer_norm_cuda_kernel.cu"],
             extra_compile_args={
-                "cxx": ["-O3"] + version_dependent_macros,
-                "nvcc": append_nvcc_threads(["-maxrregcount=50", "-O3", "--use_fast_math"] + version_dependent_macros),
+                "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
+                "nvcc": append_nvcc_threads(["-maxrregcount=50", "-O3", "--use_fast_math"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
         )
     )
@@ -234,8 +234,8 @@ if "--cuda_ext" in sys.argv:
             name="mlp_cuda",
             sources=["csrc/mlp.cpp", "csrc/mlp_cuda.cu"],
             extra_compile_args={
-                "cxx": ["-O3"] + version_dependent_macros,
-                "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros),
+                "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
+                "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
         )
     )
@@ -244,8 +244,8 @@ if "--cuda_ext" in sys.argv:
             name="fused_dense_cuda",
             sources=["csrc/fused_dense.cpp", "csrc/fused_dense_cuda.cu"],
             extra_compile_args={
-                "cxx": ["-O3"] + version_dependent_macros,
-                "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros),
+                "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
+                "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
         )
     )
