@@ -169,10 +169,17 @@ if "--distributed_lamb" in sys.argv:
         )
     )
 
+CUBLAS_LIB = []
+
 if "--cuda_ext" in sys.argv:
     sys.argv.remove("--cuda_ext")
     raise_if_cuda_home_none("--cuda_ext")
     check_cuda_torch_binary_vs_bare_metal(CUDA_HOME)
+
+    CUBLAS_LIB = [
+        "cublas",
+        "cublasLT"
+    ]
 
     ext_modules.append(
         CUDAExtension(
@@ -205,6 +212,7 @@ if "--cuda_ext" in sys.argv:
                     + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE']
                 ),
             },
+            libraries = CUBLAS_LIB,
         )
     )
     ext_modules.append(
@@ -215,6 +223,7 @@ if "--cuda_ext" in sys.argv:
                 "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
                 "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
+            libraries = CUBLAS_LIB,
         )
     )
 
@@ -226,6 +235,7 @@ if "--cuda_ext" in sys.argv:
                 "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
                 "nvcc": append_nvcc_threads(["-maxrregcount=50", "-O3", "--use_fast_math"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
+            libraries = CUBLAS_LIB,
         )
     )
 
@@ -237,6 +247,7 @@ if "--cuda_ext" in sys.argv:
                 "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
                 "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
+            libraries = CUBLAS_LIB,
         )
     )
     ext_modules.append(
@@ -247,6 +258,7 @@ if "--cuda_ext" in sys.argv:
                 "cxx": ["-O3"] + version_dependent_macros + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
                 "nvcc": append_nvcc_threads(["-O3"] + version_dependent_macros) + ['-D_DISABLE_EXTENDED_ALIGNED_STORAGE'],
             },
+            libraries = CUBLAS_LIB,
         )
     )
 
@@ -271,6 +283,7 @@ if "--cuda_ext" in sys.argv:
                     + version_dependent_macros
                 ),
             },
+            libraries = CUBLAS_LIB,
         )
     )
 
@@ -295,6 +308,7 @@ if "--cuda_ext" in sys.argv:
                     + version_dependent_macros
                 ),
             },
+            libraries = CUBLAS_LIB,
         )
     )
 
@@ -316,6 +330,7 @@ if "--cuda_ext" in sys.argv:
                     + version_dependent_macros
                 ),
             },
+            libraries = CUBLAS_LIB,
         )
     )
 
@@ -354,6 +369,7 @@ if "--cuda_ext" in sys.argv:
                         + cc_flag
                     ),
                 },
+                libraries = CUBLAS_LIB,
             )
         )
 
