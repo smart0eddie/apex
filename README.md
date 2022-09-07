@@ -138,3 +138,54 @@ A Python-only build omits:
 `pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" .` may work if you were able to build Pytorch from source
 on your system. A Python-only build via `pip install -v --no-cache-dir .` is more likely to work.  
 If you installed Pytorch in a Conda environment, make sure to install Apex in that same environment.
+
+#### FIX
+Based on [kezewang's patch](https://github.com/NVIDIA/apex/compare/master...kezewang:apex:master)
+
+1. 
+Add 
+
+``` 
+#define _ENABLE_EXTENDED_ALIGNED_STORAGE
+```
+in csrc/multi_tensor_adagrad.cu
+
+and 
+```
+['-D_DISABLE_EXTENDED_ALIGNED_STORAGE']
+```
+in setup.py
+
+to fix the error
+> type_traits(1271): error: static assertion failed with "You've instantiated std::aligned_storage<Len, Align> with an extended alignment (in other words, Align > alignof(max_align_t)). ...
+
+2. 
+Replace ```uint``` with ```unsigned int``` in csrc/mlp_cuda.cu
+
+to fix the error
+> uint not defined
+
+3. 
+Add ```static_cast<float>``` to ```(r_x[ii])``` and ```(r_y[ii])```
+
+to fix the error
+> error: identifier "isfinite< ::c10::Half> " is undefined in device code
+
+4. 
+Add
+```
+CUBLAS_LIB = [
+        "cublas",
+        "cublasLT"
+    ]
+```
+
+and 
+```
+libraries = CUBLAS_LIB,
+```
+
+in setup.py 
+
+to fix the LNK2001 error of cublasXXXX modules
+
